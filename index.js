@@ -1,29 +1,25 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 
+const app = express();
 const port = 8080;
 
-const server = http.createServer((req, res) => {
-  let path = '';
-
-  if (req.url === '/') {
-    path = './index.html';
-  } else if (req.url === '/about'
-    || req.url === '/contact-me'
-  ) {
-    path = `./${req.url}.html`;
-  } else {
-    path = './404.html';
-  }
-
-  fs.readFile(path, (err, data) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write(data);
-    return res.end();
-  });
+app.get('/', function (req, res) {
+  res.sendFile('index.html', { root: __dirname });
 });
 
-server.listen(port, () => {
+app.get('/about', function (req, res) {
+  res.sendFile('about.html', { root: __dirname });
+});
+
+app.get('/contact-me', function (req, res) {
+  res.sendFile('contact-me.html', { root: __dirname });
+});
+
+app.get('*', function (req, res) {
+  res.status(404).sendFile('404.html', { root: __dirname });
+});
+
+app.listen(port, function () {
   console.log(`Server running at http://127.0.0.1:${port}/`);
 });
 
