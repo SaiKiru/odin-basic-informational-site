@@ -19,6 +19,11 @@ app.get('*', function (req, res) {
   res.status(404).sendFile('404.html', { root: __dirname });
 });
 
+app.use(function (err, req, res, next) {
+  console.log(err.stack);
+  res.status(500).send('Something went wrong. Try again later.');
+});
+
 app.listen(port, function () {
   console.log(`Server running at http://127.0.0.1:${port}/`);
 });
